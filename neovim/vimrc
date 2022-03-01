@@ -1,0 +1,823 @@
+" {{{ Global variables
+" gruvbox
+let g:gruvbox_vert_split = 'bg1'
+let g:gruvbox_sign_column = 'bg0'
+
+" defx
+let g:defx_bufname = 'default-0'
+let g:defx_icons_column_length = 2
+
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+
+" lightline
+let g:lightline = {
+	\ 'colorscheme': 'MyGruvbox',
+	\ 'active': {
+	\   'left': [ [ 'mode', 'paste' ],
+	\             [ 'readonly', 'myfilename' ],
+    \             [ 'cocstatus' ] ],
+    \   'right': [ [ 'percent' ],
+    \              [ 'fileformat', 'fileencoding', 'filetype' ]]
+	\ },
+    \ 'inactive': {
+    \   'left': [['myfilename']],
+    \   'right': [['percent']]
+    \ },
+    \ 'component': { 
+    \   'fileformat': '%{&ff=="unix"?"":&ff}',
+    \   'fileencoding': '%{&fenc=="utf-8"?"":&fenc}',
+    \   'myfilename': '%f%m'
+    \ },
+    \ 'component_visible_condition': {
+    \   'fileformat': '&ff&&&ff!="unix"',
+    \   'fileencoding': '&fenc&&&fenc!="utf-8"' 
+    \ },
+	\ 'component_function': {
+	\   'cocstatus': 'coc#status',
+	\   'currentfunction': 'CocCurrentFunction'
+	\ },
+	\ }
+    
+" vim-startify
+let g:startify_session_dir = '~/.vim/sessions'
+let g:startify_bookmarks = [ 
+            \ {'o': '~/go/src/yunion.io/x/onecloud'}, 
+            \ {'s': '~/code/go/yunion/onecloud-service-operator'},
+            \ {'n': '~/Documents/NoteBook'},
+            \ ]
+let g:startify_session_persistence = 1
+let NERDTreeHijackNetrw = 0
+
+let g:startify_lists = [
+          \ { 'type': 'sessions',  'header': ['   Sessions']       },
+          \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+          \ ]
+
+" vim-translator
+let g:translator_default_engines = ['haici', 'google']
+
+" vim-floaterm
+let g:floaterm_gitcommit = "split"
+let g:floaterm_width = 0.7
+let g:floaterm_height = 0.7
+
+" markdown 设置
+let g:vim_markdown_folding_disabled = 1
+let g:vmt_auto_update_on_save = 0
+
+" fzf
+let $FZF_DEFAULT_OPTS='--bind=ctrl-n:preview-down,ctrl-p:preview-up'
+let g:coc_fzf_preview = 'right:50%'
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+" coc-snippet
+let g:coc_snippet_next = '<tab>'
+
+" go-vim 配置
+let g:go_highlight_variable_declarations = 0
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
+
+" coc.nvim
+let g:coc_status_error_sign = ' '
+let g:coc_status_warning_sign = ' '
+
+" vista
+let g:vista_echo_cursor = 0
+let g:vista_executive_for = {
+        \ 'go': 'coc',
+        \ 'py': 'coc',
+        \ 'json': 'coc',
+        \ }
+let g:vista_fzf_preview = ['right:50%']
+let g:vista_disable_statusline = 1
+let g:vista_highlight_whole_line = 1
+
+" vimwiki
+let g:vimwiki_global_ext = 0
+let g:vimwiki_list = [{
+    \ 'auto_export': 1,
+    \ 'auto_header' : 1,
+    \ 'path': '$HOME/Documents/vimwiki/',
+    \ 'syntax': 'markdown',
+    \ 'ext': '.md',
+    \ 'template_path': '$HOME/Documents/vimwiki/templates/',
+    \ 'automatic_nested_syntaxes':1,
+    \ 'template_default':'GitHub',
+    \ 'template_ext':'.html5',
+    \ 'path_html': '$HOME/Documents/vimwiki/site_html/', 
+    \ 'custom_wiki2html': '$HOME/Documents/Setting/wiki2html.sh',
+    \ 'autotags': 1,
+    \ 'list_margin': 0,
+    \ 'links_space_char' : '_',
+    \ 'nested_syntaxes': {'python': 'python', 'c++': 'cpp', 'go': 'go', 'json': 'json'}}]
+
+let g:vimwiki_listsyms = '✗○◐●✓'
+
+let g:mkdp_filetypes = ['markdown', 'vimwiki']
+
+" dadbod-ui
+let g:db_ui_win_position = 'right'
+let g:db_ui_show_database_icon = 1
+let g:db_ui_use_nerd_fonts = 1
+let g:db_ui_show_help = 0
+let g:db_ui_force_echo_notifications = 1
+let g:db_ui_auto_execute_table_helpers = 1
+let g:db_ui_execute_on_save = 0
+let g:db_ui_table_helpers = {
+\   'mysql': {
+\     'List': 'SELECT * FROM `{table}` LIMIT 10'
+\   }
+\ }
+
+let g:markdown_composer_autostart = 0
+
+function! BuildComposer(info)
+  if a:info.status != 'unchanged' || a:info.force
+    if has('nvim')
+      !cargo build --release --locked
+    else
+      !cargo build --release --locked --no-default-features --features json-rpc
+    endif
+  endif
+endfunction
+" }}} Global variables
+
+" {{{ Load plugins
+
+call plug#begin('~/.vim/plugged')
+Plug 'itchyny/lightline.vim'
+" Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'honza/vim-snippets'
+
+Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'rainzm/defx-icons'
+
+" db
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-ui'
+
+" markdown
+Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+" Plug 'godlygeek/tabular' "必要插件，安装在vim-markdown前面
+" Plug 'plasticboy/vim-markdown'
+
+" golang
+Plug 'sheerun/vim-polyglot'
+
+" fzf
+Plug '~/.fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'antoinemadec/coc-fzf'
+
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'mhinz/vim-signify'
+Plug 'moll/vim-bbye'
+Plug 'voldikss/vim-floaterm'
+Plug 'mhinz/vim-startify'
+Plug 'voldikss/vim-translator'
+
+Plug 'rainzm/vim-choosewin'
+
+Plug 'vimwiki/vimwiki'
+
+Plug 'pearofducks/ansible-vim'
+
+" debugger
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
+
+Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
+call plug#end()
+" }}} Load plugins
+
+" {{{ Vim options
+
+set sessionoptions+=globals
+set nu 
+set rnu 
+set autoread 
+" au FocusGained * :checktime
+" Compatibility issues in macos
+set backspace=2 
+set ph=15 " pum height
+set pb=10 " pum blend
+
+set laststatus=2
+set noshowmode
+set maxmempattern=2000
+
+" indent
+" 将制表符扩展为空格
+set expandtab
+set shiftwidth=4 tabstop=4 softtabstop=4
+set smartindent
+autocmd Filetype yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+" 禁止折行
+" set nowrap
+" 开启实时搜索功能
+set incsearch
+" 搜索时大小写不敏感
+" set ignorecase
+" vim 自身命令行模式智能补全
+set wildmenu
+
+" split vsplit 设置
+set splitright
+set splitbelow
+
+" Delete pipe characters on styling vertical split borders
+set fillchars+=vert:\ 
+
+" colorscheme
+syntax on
+syntax enable
+set bg=dark
+" colorscheme Tomorrow-Night
+set termguicolors
+colorscheme gruvbox
+" autocmd vimenter * colorscheme gruvbox
+
+filetype on
+filetype plugin on
+filetype plugin indent on
+
+set nuw=3
+set cursorline
+" 显示光标当前的位置
+" set ruler
+" 禁止光标的闪烁
+" set guicursor+=a:blinkon0
+
+" coc.nvim
+set hidden
+" Some servers have issues with backup files, see #649
+set nobackup
+set nowritebackup
+" Better display for messages
+set cmdheight=1
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=200
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+" if has("patch-8.1.1564")
+"   " Recently vim can merge signcolumn and number column into one
+set signcolumn=number
+" else
+"   set signcolumn=yes
+" endif
+
+" defx
+call defx#custom#option('_', {
+	\ 'columns': 'indent:icons: :filename',
+	\ 'winwidth': 30,
+	\ 'split': 'vertical',
+	\ 'direction': 'topleft',
+	\ 'show_ignored_files': 0,
+    \ 'listed': 1,
+    \ 'resume': 1,
+	\ 'root_marker': '≡ ',
+	\ 'ignored_files':
+	\     '.mypy_cache,.pytest_cache,.git,.hg,.svn,.stversions,.idea'
+	\   . ',__pycache__,.sass-cache,*.egg-info,.DS_Store,*.pyc,*.swp'
+	\   . ',_output,.github,.circleci'
+	\ })
+
+" }}} Vim options
+
+" {{{ Key mappings
+let mapleader="'"
+" 行首和行尾
+nnoremap <C-A> ^
+nnoremap <C-S> $
+" 将选中文本块复制至系统剪贴板
+vnoremap <Leader>y "+y
+" 将系统剪贴板内容粘贴至 vim
+nmap <Leader>p "+p
+" 保存当前窗口内容
+nmap <Leader>s :w<CR>
+" 保存所有窗口内容
+nmap <Leader>S :wa<CR>
+" 不做任何保存，直接退出 vim
+nnoremap <expr> <silent> <leader>qq bufwinnr(g:defx_bufname) ? ':Defx -close<CR>:qa!<CR>' : ':qa!<CR>'
+" 保存所有窗口内容并退出 vim
+nnoremap <expr> <silent> <leader>Q bufwinnr(g:defx_bufname) ? ':Defx -close<CR>:wa<CR>:qa<CR>' : ':wa<CR>:qa<CR>'
+
+nnoremap <silent> <leader>dc :lua require'dap'.continue()<CR>
+nnoremap <silent> <leader>ds :lua require'dap'.step_over()<CR>
+nnoremap <silent> <leader>di :lua require'dap'.step_into()<CR>
+nnoremap <silent> <leader>do :lua require'dap'.step_out()<CR>
+nnoremap <silent> <leader>dt :lua require'dap'.stop()<CR>
+nnoremap <silent> <leader>dg :lua require'dap'.run_to_cursor()<CR>
+nnoremap <silent> <leader>db :lua require'dap'.toggle_breakpoint()<CR>
+nnoremap <silent> <leader>dd :lua package.loaded['dap_conf'] = nil; require('dap_conf')<CR>
+nnoremap <silent> <leader>dr :lua require'dap'.repl.toggle()<CR>
+
+nnoremap <C-[> <C-I>
+nnoremap <C-O> <C-T>
+nnoremap <C-P> <C-O>
+" nmap <Leader>c zz<CR>20<C-E>
+
+" 当输入查找命令时，再启用高亮
+noremap n :set hlsearch<cr>n
+noremap N :set hlsearch<cr>N
+noremap / :set hlsearch<cr>/
+noremap ? :set hlsearch<cr>?
+noremap * *:set hlsearch<cr>
+nnoremap gm :set nohlsearch<cr>
+
+" defx.vim
+"nnoremap <silent> <Leader>1
+"\ :<C-u>Defx -toggle<CR>
+nnoremap <silent> <Leader>1
+\ :<C-u>call <SID>my_defx('-toggle')<CR>
+nnoremap <silent> <Leader>v
+\ :<C-u>Defx -search-recursive=`expand('%:p')`<CR><C-W>=
+
+
+" coc-smartf
+nmap f <Plug>(coc-smartf-forward)
+nmap F <Plug>(coc-smartf-backward)
+nmap ; <Plug>(coc-smartf-repeat)
+" nmap , <Plug>(coc-smartf-repeat-opposite)
+augroup Smartf
+  autocmd User SmartfEnter :hi Conceal ctermfg=220 guifg=#228B22
+  autocmd User SmartfLeave :hi Conceal ctermfg=239 guifg=#504945
+augroup end
+
+" vim-translator
+nmap <silent> <Leader>t <Plug>TranslateW
+vmap <silent> <Leader>t <Plug>TranslateWV
+
+" floaterm
+nnoremap   <silent>   <Leader>4    :FloatermNew<CR>
+tnoremap   <silent>   <Leader>4    <C-\><C-n>:FloatermNew<CR>
+nnoremap   <silent>   <Leader>3   :FloatermToggle<CR>
+tnoremap   <silent>   <Leader>3   <C-\><C-n>:FloatermToggle<CR>
+
+" gitgutter 设置
+nmap [c <Plug>(GitGutterPrevHunk)
+nmap ]c <Plug>(GitGutterNextHunk)
+
+" db-ui
+nmap <Leader>ut :DBUIToggle<CR>
+map <Leader>ue <Plug>(DBUI_ExecuteQuery)
+map <Leader>us <Plug>(DBUI_SaveQuery)
+map <Leader>uv <Plug>(DBUI_ToggleResultLayout)
+
+" fzf
+map <Leader>p :Files<CR>
+map <Leader>b :Buffers<CR>
+nmap gf :Rg <C-R><C-W><CR>
+nnoremap <silent> <Leader>e  :<C-u>CocFzfList diagnostics --current-buf<CR>
+nnoremap <silent> <Leader>2  :<C-u>CocFzfList outline<CR>
+nnoremap <silent> <Leader>ls :<C-u>CocFzfList symbols --kind Struct<CR>
+nnoremap <silent> <Leader>li :<C-u>CocFzfList symbols --kind Interface<CR>
+nnoremap <silent> <Leader>lf :<C-u>CocFzfList symbols --kind Function<CR>
+nnoremap <silent> <Leader>lm :<C-u>CocFzfList symbols --kind Method<CR>
+
+" -------------------------------------------------------------------------------------------------
+" coc.nvim default settings
+" -------------------------------------------------------------------------------------------------
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  "inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <silent><expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+" nmap <silent> [g <Plug>(coc-diagnostic-prev)
+" nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+" nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gd :call <SID>gotoTag("Definition")<CR>
+"nmap <silent> gD <C-W>s<Plug>(coc-definition)
+"nmap <silent> gy <Plug>(coc-type-definition)
+"nmap <silent> gi <Plug>(coc-implementation)
+"nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gi :call <SID>gotoTag("Implementation")<CR>
+nmap <silent> gr :call <SID>gotoTag("References")<CR>
+nmap <silent> gt :call <SID>gotoTag("")<CR>
+
+inoremap <silent> <c-t> <c-o>:call CocActionAsync('showSignatureHelp')<CR>
+" nnoremap <silent> <c-t> :call CocActionAsync('showSignatureHelp')<CR>
+
+nnoremap <silent> gs :call <SID>show_documentation()<CR>
+nmap <leader>rn <Plug>(coc-rename)
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>ac <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+" Use `:Format` to format current buffer
+nmap <silent> <Leader>f <Plug>(coc-format)
+
+" " Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+
+nmap <expr> <silent> <leader>c <SID>select_current_word()
+function! s:select_current_word()
+  if !get(b:, 'coc_cursors_activated', 0)
+    return "\<Plug>(coc-cursors-word)"
+  endif
+  return "*\<Plug>(coc-cursors-word):nohlsearch\<CR>"
+endfunc
+xmap <silent> <leader>d <Plug>(coc-cursors-range)
+
+" choosewin
+nmap gwg :ChooseWin<CR>
+nmap gwc :ChooseWinCopy<CR>
+nmap gws :ChooseWinSwap<CR>
+let g:choosewin_keymap = {}
+let g:choosewin_blink_on_land = 0
+
+" }}} Key mappings
+
+" {{{ Functions
+
+" delete buffer
+function! s:list_buffers()
+  redir => list
+  silent ls
+  redir END
+  return split(list, "\n")
+endfunction
+
+function! s:delete_buffers(lines)
+  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
+endfunction
+
+" coc.nvim
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Returns the function the cursor is currently in, used in lightline status bar.
+function! CocCurrentFunction()
+  let f = get(b:, 'coc_current_function', '')
+  return f == '' ? '' : f . '()'
+endfunction
+
+" defx.nvim
+function! s:defx_mappings() abort
+    " Define mappings
+    let g:defx_bufname = bufname('%')
+    nnoremap <silent><buffer><expr> <CR>
+                \ defx#is_directory() ? 
+                \ defx#do_action('open_or_close_tree') : 
+                \ defx#do_action('multi', ['drop'])
+    nnoremap <silent><buffer><expr> za
+                \ defx#do_action('close_tree')
+    nnoremap <silent><buffer><expr> c
+                \ defx#do_action('copy')
+    nnoremap <silent><buffer><expr> m
+                \ defx#do_action('move')
+    nnoremap <silent><buffer><expr> p
+                \ defx#do_action('paste')
+    nnoremap <silent><buffer><expr> s
+                \ defx#do_action('multi',[['drop','split']])
+    nnoremap <silent><buffer><expr> v
+                \ defx#do_action('multi',[['drop','vsplit']])
+    nnoremap <silent><buffer><expr> nd
+                \ defx#do_action('new_directory')
+    nnoremap <silent><buffer><expr> nf
+                \ defx#do_action('new_file')
+"    nnoremap <silent><buffer><expr> M
+"                \ defx#do_action('new_multiple_files')
+    nnoremap <silent><buffer><expr> d
+                \ defx#do_action('remove')
+    nnoremap <silent><buffer><expr> r
+                \ defx#do_action('rename')
+   nnoremap <silent><buffer><expr> yy
+               \ defx#do_action('yank_path')
+"    nnoremap <silent><buffer><expr> .
+"                \ defx#do_action('toggle_ignored_files')
+    nnoremap <silent><buffer><expr> <C-r>
+                \ defx#do_action('redraw')
+    nnoremap <silent><buffer><expr> <C-g>
+                \ defx#do_action('print')
+    nnoremap <silent><buffer><expr><nowait> w 
+                \ defx#do_action('open', 'choose')
+endfunction
+
+function! s:my_defx(args) abort
+    let l:pre_winid = 0
+    let l:defx_init = 0
+    let l:t = bufwinnr(g:defx_bufname)
+    if bufwinnr(g:defx_bufname) < 0
+        let l:defx_init = 1 
+    endif
+        
+    if bufname('%') ==# g:defx_bufname
+        execute 'wincmd p'
+        let l:pre_winid = win_getid()
+        execute 'wincmd p'
+    endif
+    execute 'Defx ' . a:args
+    if l:defx_init
+        execute "normal \<C-W>\="
+    endif
+    if l:pre_winid
+        execute 'call win_gotoid(' . l:pre_winid . ')'
+    endif
+endfunction
+
+" Remap keys for gotos
+" tagstack gotoTag
+function! s:gotoTag(tagkind) abort
+  let l:current_tag = expand('<cWORD>')
+
+  let l:current_position = getcurpos()
+  let l:current_position[0] = bufnr()
+
+  let l:current_tag_stack = gettagstack()
+  let l:current_tag_index = l:current_tag_stack['curidx']
+  let l:current_tag_items = l:current_tag_stack['items']
+
+  if len(a:tagkind) == 0 || CocAction('jump' . a:tagkind)
+    let l:new_tag_index = l:current_tag_index + 1
+    let l:new_tag_item = [{'tagname': l:current_tag, 'from': l:current_position}]
+    let l:new_tag_items = l:current_tag_items[:]
+    if l:current_tag_index <= len(l:current_tag_items)
+      call remove(l:new_tag_items, l:current_tag_index - 1, -1)
+    endif
+    let l:new_tag_items += l:new_tag_item
+
+    call settagstack(winnr(), {'curidx': l:new_tag_index, 'items': l:new_tag_items}, 'r')
+  endif
+endfunction
+
+function! s:fzf_preview_p(bang, ...) abort
+    let preview_args = get(g:, 'fzf_preview_window', ['right:50%', 'ctrl-/'])
+    if empty(preview_args)
+        return { 'options': ['--preview-window', 'hidden'] }
+    endif
+
+    " For backward-compatiblity
+    if type(preview_args) == type('')
+        let preview_args = [preview_args]
+    endif
+    return call('fzf#vim#with_preview', extend(copy(a:000), preview_args))
+endfunction
+
+" WinDo: Like :windo, but preserves the current window and view.
+function! WinDo(command) abort
+  let l:currwin = winnr()
+  let l:view = winsaveview()
+  try
+    execute printf('windo execute "%s"', escape(a:command, '"'))
+  finally
+    execute l:currwin . 'wincmd w'
+    call winrestview(l:view)
+  endtry
+endfunction
+" }}} Functions
+
+" {{{ Commands
+
+
+  command! -bar -bang MP
+        \ call fzf#vim#marks(
+        \     s:fzf_preview_p(<bang>0, {'placeholder': '$([ -r $(echo {4} | sed "s#^~#$HOME#") ] && echo {4} || echo ' . fzf#shellescape(expand('%')) . '):{2}',
+        \               'options': '--preview-window +{2}-/2'}),
+        \     <bang>0)
+
+" copy current position
+command! -nargs=0 CurrentPosition :call setreg('0', expand('%:p') . ":". line('.'))
+
+"
+command! MarkdownPaste :r !xclip -t text/html -sel clip -o | pandoc -f html -t markdown
+
+" copy
+command! -nargs=* WinDo   call WinDo(<q-args>)
+
+" coc.nvim
+command! -nargs=0 Format :call CocAction('format')
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR   :call CocAction('runCommand', 'editor.action.organizeImport')
+
+" defx
+command! -nargs=1 DefxFind :execute 'Defx -search=' . getcwd() . "/" . <args>
+
+" delete buffer
+command! BD call fzf#run(fzf#wrap({
+  \ 'source': s:list_buffers(),
+  \ 'sink*': { lines -> s:delete_buffers(lines) },
+  \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
+\ }))
+
+" }}} Commands
+
+" {{{ Autocommands
+
+au BufRead,BufNewFile *.go setfiletype go
+au BufEnter github.com_*.txt set filetype=markdown
+
+autocmd FileType go let b:coc_root_patterns = ['go.mod']
+
+autocmd BufRead,BufNewFile *.tmpl set ft=gohtmltmpl
+
+" vim-floaterm
+autocmd FileType floaterm setlocal winblend=10
+
+" defx.nvim
+autocmd FileType defx call s:defx_mappings()
+autocmd FileType defx set nornu
+autocmd FileType defx set nonu
+
+" lightline
+autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+
+" commentary
+autocmd FileType python,shell,yaml setlocal commentstring=#\ %s
+
+"打开文件恢复光标位置
+autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+autocmd FileType vim,c++,txt setlocal foldmethod=marker
+
+" GStatus: more configuration and keymaps for fugitive index buffers
+augroup FugitiveAddon
+  autocmd!
+  " when git index is updated via hunk stage operation, reload fugitive buffers
+  if exists('*timer_start')  " 7.4.1578+
+    autocmd User GitGutterStage  call timer_start(0, function('ReloadFugitiveBlobs'))
+  endif
+augroup FugitiveAddon
+
+function! ReloadFugitiveBlobs(...) abort
+  WinDo if bufname('%') =~ '^fugitive://' | :e | endif
+endfunction
+
+" augroup mygroup
+"   autocmd!
+"   " Setup formatexpr specified filetype(s).
+"   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+"   " Update signature help on jump placeholder.
+"   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+" augroup end
+
+autocmd FileType go autocmd! BufWritePre <buffer> :call CocAction('format')
+augroup VimWiki
+  autocmd!
+  autocmd FileType vimwiki setlocal colorcolumn=80
+  autocmd FileType vimwiki nmap <silent><buffer> <leader>ct <Plug>VimwikiToggleListItem
+  autocmd FileType vimwiki inoremap <expr><silent><buffer> <CR> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-]>\<Esc>:VimwikiReturn 1 5\<CR>"
+augroup VimWiki
+
+" }}} Autocommands
+
+" {{{ Not determined
+" coc-snippet 配置
+" imap <C-t> <Plug>(coc-snippets-expand)
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+" let g:coc_snippet_next = '<tab>'
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+" let g:coc_snippet_prev = '<c-b>'
+
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? coc#_select_confirm() :
+"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" }}} Not determined
+
+" {{{ Personal experiment plugin
+" if exists('g:loaded_raindev')
+"     finish
+" endif
+" let g:loaded_raindev = 1
+
+" let s:plugin_name = 'raindev'
+
+" function! s:RegisterRaindev(host) abort
+"     " 'hello' is the binary created by compiling the program above.
+"     return jobstart([s:plugin_name], {'rpc': v:true})
+" endfunction
+
+" call remote#host#Register(s:plugin_name, 'x', function('s:RegisterRaindev'))
+" " The following lines are generated by running the program
+" " command line flag --manifest hello
+" call remote#host#RegisterPlugin(s:plugin_name, '0', [
+"     \ {'type': 'function', 'name': 'Hello', 'sync': 1, 'opts': {}},
+"     \ {'type': 'command', 'name': 'ZySplit', 'sync': 1, 'opts':{'nargs': '*'}},
+"     \ ])
+" }}}
+
+" {{{ Lua Code
+lua << EOF
+
+require('dap')
+vim.fn.sign_define('DapBreakpoint', {text='', texthl='DapBreakpoint', linehl='', numhl=''})
+vim.fn.sign_define('DapStopped', {text='', texthl='DapStopped', linehl='', numhl=''})
+
+EOF
+
+lua require("dap_conf")
+
+lua << EOF
+require("dapui").setup({
+  icons = {
+    expanded = "",
+    collapsed = ""
+  },
+  mappings = {
+    -- Use a table to apply multiple mappings
+    expand = {"<CR>", "<2-LeftMouse>"},
+    open = "o",
+    remove = "d",
+    edit = "e",
+    repl = "r",
+  },
+  sidebar = {
+    open_on_start = true,
+    elements = {
+      -- You can change the order of elements in the sidebar
+      { id = "scopes", size = 0.5 },
+      { id = "breakpoints", size = 0.2 },
+      { id = "watches", size = 0.3 },
+    },
+    width = 50,
+    position = "left" -- Can be "left" or "right"
+  },
+  tray = {
+    open_on_start = false,
+    elements = {
+      "repl",
+    },
+    height = 10,
+    position = "bottom" -- Can be "bottom" or "top"
+  },
+  floating = {
+    max_height = nil, -- These can be integers or a float between 0 and 1.
+    max_width = nil   -- Floats will be treated as percentage of your screen.
+  },
+  windows = { indent = 1 },
+})
+EOF
+" }}}
+
+" {{{ Coc.nvim
+let g:coc_global_extensions = [
+        \ 'coc-snippets',
+        \ 'coc-smartf',
+        \ 'coc-pairs',
+        \ 'coc-lists',
+        \ 'coc-imselect',
+        \ 'coc-eslint',
+        \ 'coc-db',
+        \ 'coc-tsserver',
+        \ 'coc-rust-analyzer',
+        \ 'coc-pyright',
+        \ 'coc-sumneko-lua',
+        \ 'coc-json',
+        \ 'coc-go',
+        \ 'coc-css'
+      \ ]
+" }}}
+" vim:ts=4:sw=4:et
