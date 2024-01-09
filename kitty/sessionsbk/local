@@ -1,0 +1,15 @@
+launch --title "wcloud" bash -c "kitty @ set-tab-title wcloud; exec /opt/homebrew/bin/fish -il"
+
+cd /Users/rain/code/go/wcloud/backend
+
+new_tab dev
+
+launch --title "dev" /opt/homebrew/bin/fish
+
+new_tab note
+
+launch --title "note" /opt/homebrew/bin/fish
+
+new_tab any
+
+launch --title "any" /opt/homebrew/bin/fish

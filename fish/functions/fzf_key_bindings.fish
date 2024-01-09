@@ -1,0 +1,1 @@
+/Users/rain/.fzf/shell/key-bindings.fish
