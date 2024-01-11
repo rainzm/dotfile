@@ -82,7 +82,7 @@ ctrl + alt - j : yabai -m window --swap south
 ctrl + alt - k : yabai -m window --swap north
 ctrl + alt - l : yabai -m window --swap east
 # close window, dangerous use shift
-shift + alt - w : yabai -m window --close
+shift + alt - w : yabai -m window --close; yabai -m query --windows --window &> /dev/null || yabai -m window --focus recent || yabai -m window --focus first
 
 # minimize window
 shift + alt - m : yabai -m window --minimize
