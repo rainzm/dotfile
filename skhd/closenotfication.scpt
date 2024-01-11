@@ -7,7 +7,7 @@ tell application "System Events"
 			set _actions to actions of _group
 			
 			repeat with _action in _actions
-				if description of _action is in {"Clear All", "全部清除"} then
+				if description of _action is in {"关闭", "全部清除"} then
 					perform _action
 					
 				end if
