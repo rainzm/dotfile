@@ -37,7 +37,6 @@ set -x GOPATH /Users/rain/go
 set -x GOBIN $GOPATH/bin
 set -x PATH $PATH:$GOBIN
 # export GOPROXY=https://goproxy.cn,direct
-set -x PATH $PATH:$GOPATH/src/yunion.io/x/onecloud/_output/bin
 
 # nvm
 set -x PATH "/Users/rain/.local/share/nvm/v18.18.1/bin" $PATH
