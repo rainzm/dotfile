@@ -17,18 +17,26 @@ yabai -m config window_opacity on
 yabai -m config mouse_modifier              fn
 yabai -m config mouse_action1               move
 yabai -m config mouse_action2               resize
-yabai -m config external_bar 		    all:25:0
+# yabai -m config external_bar 		    all:25:0
+yabai -m config menubar_opacity             0.0
+
+# yabai -m config window_opacity_duration    0.2
+yabai -m config active_window_opacity      1.0
+yabai -m config normal_window_opacity      0.9
+yabai -m config window_animation_duration  0.35
+yabai -m config window_animation_easing    ease_in_quint
+yabai -m config insert_feedback_color      0xff9dd274
 
 # ===== Rules ==================================
-yabai -m rule --add app!="^(kitty|Google Chrome|iTerm2|微信|钉钉)$" manage=off
-yabai -m rule --add app="^微信$" title!="^微信 [(]聊天[)]$" manage=off
-yabai -m rule --add app="^钉钉$" title!="^钉钉$" manage=off
-yabai -m rule --add app="^(kitty|Google Chrome|iTerm2|微信|钉钉|QQ音乐)$" opacity=0.95
-yabai -m rule --add app=".*" layer=normal
+yabai -m rule --add app!="^(kitty|Google Chrome|iTerm2|Safari浏览器)$" manage=off
+# yabai -m rule --add app="^微信$" title!="^微信 [(]聊天[)]$" manage=off
+# yabai -m rule --add app="^钉钉$" title!="^钉钉$" manage=off
+# yabai -m rule --add app="^(kitty|Google Chrome|iTerm2)$" opacity=0.95
+yabai -m rule --add app=".*" sub-layer=normal
 
 yabai -m signal --add event=window_focused action="sketchybar --trigger window_focus"
-# yabai -m signal --add event=window_destroyed action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus recent || yabai -m window --focus first"
-# yabai -m signal --add event=application_terminated action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus recent || yabai -m window --focus first"
+yabai -m signal --add event=window_destroyed action="yabai -m query --windows --window &> /dev/null ||  yabai -m window --focus prev || yabai -m window --focus recent"
+yabai -m signal --add event=application_terminated action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus prev || yabai -m window --focus recent"
 
 # borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=2.0 whitelist="kitty,Google Chrome,iTerm2,WeChat,DingTalk" &
 

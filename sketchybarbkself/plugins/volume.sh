@@ -5,21 +5,15 @@
 
 if [ "$SENDER" = "volume_change" ]; then
   VOLUME="$INFO"
-  source "$CONFIG_DIR/icons.sh"
-  source "$CONFIG_DIR/colors.sh"
 
-  case $VOLUME in
-    [6-9][0-9]|100) ICON=$VOLUME_100
+  case "$VOLUME" in
+    [6-9][0-9]|100) ICON="󰕾"
     ;;
-    [3-5][0-9]) ICON=$VOLUME_66
+    [3-5][0-9]) ICON="󰖀"
     ;;
-    [1-2][0-9]) ICON=$VOLUME_33
+    [1-9]|[1-2][0-9]) ICON="󰕿"
     ;;
-    [1-9]) ICON=$VOLUME_10
-    ;;
-    0) ICON=$VOLUME_0
-    ;;
-    *) ICON=$VOLUME_100
+    *) ICON="󰖁"
   esac
 
   sketchybar --set "$NAME" icon="$ICON" label="$VOLUME%"

@@ -62,17 +62,17 @@ icon_defaults=(
 )
 
 bracket_defaults=(
-  # background.height=24
-  # background.color=$BAR_COLOR
-  # blur_radius=32
-  # background.corner_radius=$PADDINGS
-  # background.padding_left=$(($PADDINGS * 2))
-  # background.padding_right=$(($PADDINGS * 2))
+  background.height=24
+  background.color=$BAR_COLOR
+  blur_radius=32
+  background.corner_radius=$PADDINGS
+  background.padding_left=$(($PADDINGS * 2))
+  background.padding_right=$(($PADDINGS * 2))
 )
 
 menu_defaults=(
   popup.blur_radius=32
-  popup.background.color=$BAR_COLOR
+  popup.background.color=$POPUP_BACKGROUND_COLOR
   popup.background.corner_radius=$PADDINGS
   popup.background.shadow.drawing=on
   popup.background.border_width=1

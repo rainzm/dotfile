@@ -330,7 +330,7 @@ function __icon_map() {
    "1Password")
         icon_result=":one_password:"
         ;;
-   "ChatGPT" | "NextChat")
+   "ChatGPT")
         icon_result=":openai:"
         ;;
    "Orion" | "Orion RC")
@@ -366,7 +366,7 @@ function __icon_map() {
    "QQ")
         icon_result=":qq:"
         ;;
-   "QQ音乐" | "QQMusic" )
+   "QQ音乐" | "QQMusic")
         icon_result=":qqmusic:"
         ;;
    "qutebrowser")
@@ -526,7 +526,5 @@ function __icon_map() {
 }
 ### END-OF-ICON-MAP
 
-function icon_map() {
-    __icon_map "$1"
-}
-
+__icon_map "$1"
+echo "$icon_result"

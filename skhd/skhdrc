@@ -44,7 +44,8 @@ cmd - tab : yabai -m query --spaces --space \
   | xargs -I{} yabai -m window --focus {}
 
 # cycle managed windows exclude minimized and hiddened in this space
-alt - tab : if test $(yabai -m query --spaces --space | jq -r '.type') = "stack"; yabai -m window --focus stack.next || yabai -m window --focus stack.first; else; yabai -m window --focus next || yabai -m window --focus first; end
+# alt - tab : if test $(yabai -m query --spaces --space | jq -r '.type') = "stack"; yabai -m window --focus stack.next || yabai -m window --focus stack.first; else; yabai -m window --focus next || yabai -m window --focus first; end
+shift + cmd - tab :  yabai -m window --focus stack.next || yabai -m window --focus stack.first
 
 # ########################## #
 # Use ctl + cmd below config #
@@ -62,8 +63,8 @@ ctrl + cmd - c: osascript $HOME/.config/skhd/closenotfication.scpt
 # #################### #
 
 # create and destroy space 
-alt - c : yabai -m space --create
-shift + alt - d : yabai -m space --destroy # dangerous oper
+shift + cmd - c : yabai -m space --create
+shift + cmd - d : yabai -m space --destroy # dangerous oper
 
 # focus bsp window
 alt - h : yabai -m window --focus west
@@ -81,6 +82,11 @@ ctrl + alt - h : yabai -m window --swap west
 ctrl + alt - j : yabai -m window --swap south
 ctrl + alt - k : yabai -m window --swap north
 ctrl + alt - l : yabai -m window --swap east
+
+shift + cmd - h : yabai -m window --stack west
+shift + cmd - j : yabai -m window --stack south
+shift + cmd - k : yabai -m window --stack north
+shift + cmd - l : yabai -m window --stack east
 # close window, dangerous use shift
 shift + alt - w : yabai -m window --close; yabai -m query --windows --window &> /dev/null || yabai -m window --focus recent || yabai -m window --focus first
 
@@ -90,6 +96,8 @@ shift + alt - m : yabai -m window --minimize
 # toggle window opacity
 alt - o : if test $(yabai -m query --windows --window | jq -re '.opacity') = "1.0000"; yabai -m window --opacity 0.95; else; yabai -m window --opacity 1.00; end
 
+alt - m : if test $(yabai -m config menubar_opacity) = "1.0000"; yabai -m config menubar_opacity 0.00; else; yabai -m config menubar_opacity 1.00; end
+
 # use "shift + alt - =" to balance size of windows
 shift + alt - 0x18 : yabai -m space --balance
 
@@ -97,7 +105,7 @@ shift + alt - 0x18 : yabai -m space --balance
 # toggle window fill screen
 alt - f: yabai -m window --toggle zoom-fullscreen; sketchybar --trigger window_focus
 # toggle window split
-# shift + alt - s: yabai -m window --toggle split
+shift + alt - s: yabai -m window --toggle split
 # toggle window sticky
 alt - t: yabai -m window --toggle sticky
 # float / unfloat window
