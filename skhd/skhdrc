@@ -54,6 +54,8 @@ shift + cmd - tab :  yabai -m window --focus stack.next || yabai -m window --foc
 # open app's windows
 ctrl + cmd - j: open -na /Applications/Google\ Chrome.app
 ctrl + cmd - k: /Applications/kitty.app/Contents/MacOS/kitty -1 -d ~
+#ctrl + cmd - k: /Applications/WezTerm.app/Contents/MacOS/wezterm
+#ctrl + cmd - l: /Applications/WezTerm.app/Contents/MacOS/wezterm connect dev
 
 # close all notification
 ctrl + cmd - c: osascript $HOME/.config/skhd/closenotfication.scpt
