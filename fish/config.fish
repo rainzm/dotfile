@@ -27,8 +27,9 @@ function proxy -d "set proxy" -a state
     end
 end
 
-set -x LUA_PATH "/Users/rain/.luarocks/share/lua/5.1/?.lua;/Users/rain/.luarocks/share/lua/5.1/?/init.lua;;"
-set -x LUA_CPATH "/Users/rain/.luarocks/lib/lua/5.1/?.so;;"
+set -x LUA_PATH "$HOME/.luarocks/share/lua/5.1/?.lua;/Users/rain/.luarocks/share/lua/5.1/?/init.lua;;"
+set -x LUA_CPATH "$HOME/.luarocks/lib/lua/5.1/?.so;;"
+set -x LUA_CPATH "$HOME/.local/share/sketchybar_lua/?.so;;"
 set -x GITHUB_NAME rainzm
 set -x GITLAB_USER zhengyu
 

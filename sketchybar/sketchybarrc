@@ -1,34 +1,10 @@
-PLUGIN_DIR="$CONFIG_DIR/plugins"
-ITEM_DIR="$CONFIG_DIR/items"
+#!/usr/bin/env lua
 
-# Load global styles, colors and icons
-source "$CONFIG_DIR/globalstyles.sh"
+-- This is only needed once to install the sketchybar module
+-- (or for an update of the module)
+os.execute("[ ! -d $HOME/.local/share/sketchybar_lua/ ] && (git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/)")
 
-POPUP_CLICK_SCRIPT="sketchybar --set \$NAME popup.drawing=toggle"
-POPUP_OFF="sketchybar --set \$NAME popup.drawing=off"
-
-# Unload the macOS on screen indicator overlay for volume change
-launchctl unload -F /System/Library/LaunchAgents/com.apple.OSDUIHelper.plist > /dev/null 2>&1 &
-
-sketchybar --bar "${bar[@]}" --default "${item_defaults[@]}"
-
-# Left
-source "$ITEM_DIR/apple.sh"
-source "$ITEM_DIR/yabai.sh"
-source "$ITEM_DIR/spaces.sh"
-source "$ITEM_DIR/front_app.sh"
-
-source "$ITEM_DIR/flow.sh"
-
-# Right
-source "$ITEM_DIR/datetime.sh"
-source "$ITEM_DIR/battery.sh"
-source "$ITEM_DIR/wifi.sh"
-source "$ITEM_DIR/volume.sh"
-#source "$ITEM_DIR/weather.sh"
-source "$ITEM_DIR/mail.sh"
-source "$ITEM_DIR/network.sh"
-source "$ITEM_DIR/media.sh"
-# sketchybar --add alias "ClashX Pro,Item-0" right
-# source "$ITEM_DIR/moode.sh"
-sketchybar --update
+-- Add the sketchybar module to the package cpath (the module could be
+-- installed into the default search path then this would not be needed)
+package.cpath = package.cpath .. ";/Users/" .. os.getenv("USER") .. "/.local/share/sketchybar_lua/?.so"
+require("init")
