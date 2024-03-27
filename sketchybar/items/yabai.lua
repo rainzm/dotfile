@@ -24,16 +24,22 @@ local function window_state(_)
 			return
 		end
 		local stack_index = result["stack-index"]
-		print("stack_index: " .. stack_index)
 		if stack_index > 0 then
-			sbar.exec("yabai -m query --windows --window stack.last", function(ret)
-				setyabai(
-					icons.yabai.stack,
-					string.format("[%d of %d]", stack_index, ret["stack-index"]),
-					colors.red,
-					105
-				)
-			end)
+			-- 	setyabai(
+			-- 		icons.yabai.stack,
+			-- 		string.format("[%d of %d]", stack_index, ret["stack-index"]),
+			-- 		colors.red,
+			-- 		105
+			-- 	)
+			-- sbar.exec("yabai -m query --windows --window stack.last", function(ret)
+			-- 	setyabai(
+			-- 		icons.yabai.stack,
+			-- 		string.format("[%d of %d]", stack_index, ret["stack-index"]),
+			-- 		colors.red,
+			-- 		105
+			-- 	)
+			-- end)
+			setyabai(icons.yabai.stack, "", colors.red)
 		elseif result["has-fullscreen-zoom"] then
 			setyabai(icons.yabai.fullscreen, "", colors.green)
 		elseif result["split-type"] == "vertical" then

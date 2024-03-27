@@ -1,4 +1,3 @@
-local styles = require("styles")
 local cal = sbar.add("item", "calendar", {
 	update_freq = 10,
 	position = "right",
@@ -10,8 +9,12 @@ local cal = sbar.add("item", "calendar", {
 
 local weekDays = { "日", "一", "二", "三", "四", "五", "六" }
 
-cal:subscribe("forced", "routine", "system_woke", function(env)
+local function update()
 	local t = os.date("*t") -- 获取当前的日期和时间
 	local formattedTime = string.format("%d月%d日 周%s %02d:%02d", t.month, t.day, weekDays[t.wday], t.hour, t.min)
 	cal:set({ label = { string = formattedTime } })
-end)
+end
+
+cal:subscribe("routine", "system_woke", update)
+
+update()

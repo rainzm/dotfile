@@ -2,13 +2,14 @@ local helper = require("helper")
 local styles = require("styles")
 local media_ctrl = sbar.add("item", "media_ctrl", {
 	position = "right",
-	label = {
+	icon = {
 		font = {
 			family = "sketchybar-app-font",
 			style = "Regular",
 			size = styles.font_size,
 		},
 	},
+	label = { drawing = false },
 	--script = "$PLUGIN_DIR/media_ctrl.sh",
 	click_script = "sketchybar -m --set media_ctrl popup.drawing=toggle",
 	popup = {
@@ -39,7 +40,6 @@ local media_ctrl_title = sbar.add("item", "media_ctrl.title", {
 	padding_right = 0,
 	width = 0,
 	label = {
-		font = "sketchybar-app-font:Heavy:15.0",
 		max_chars = 13,
 	},
 	y_offset = 55,
@@ -62,7 +62,7 @@ local media_ctrl_album = sbar.add("item", "media_ctrl.album", {
 	icon = { drawing = false },
 	padding_left = 0,
 	padding_right = 0,
-	y_offset = 15,
+	y_offset = 10,
 	width = 0,
 	label = {
 		max_chars = 13,
@@ -170,7 +170,11 @@ local function update()
 			media_ctrl_artist:set({ label = { string = artist } })
 			media_ctrl_album:set({ label = { string = album } })
 			media_ctrl_play:set({ icon = { string = playbackRate == "1" and "􀊆" or "􀊄 " } })
-			media_ctrl:set({ label = { string = helper.app_icon(app) }, drawing = true })
+			media_ctrl:set({
+				icon = { string = helper.app_icon(app) },
+				--label = { string = app .. ": " .. title },
+				drawing = true,
+			})
 			sbar.exec("nowplaying-cli get artworkData", function(data)
 				local file = io.open("/tmp/cover.jpg", "wb")
 				local decoded = helper.base64_decode(data)
@@ -193,7 +197,7 @@ local function update()
 end
 
 media_ctrl:subscribe("media_change", update)
-media_ctrl:subscribe("mouse.exited", "mouse.exited.global", function()
+media_ctrl:subscribe("mouse.exited.global", function()
 	media_ctrl:set({ popup = { drawing = false } })
 end)
 

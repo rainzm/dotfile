@@ -2,14 +2,14 @@ local colors = require("colors")
 local helper = require("helper")
 
 local padding = 6
-local font_size = 14.0
+local font_size = 16.0
 local space_padding = 8
 local icon_label_padding = 4
 
 local font = {
 	family = "FiraCode Nerd Font",
 	style = "Medium",
-	size = 14.0,
+	size = font_size,
 }
 
 local bar = {
@@ -17,8 +17,8 @@ local bar = {
 	position = "top",
 	topmost = "window",
 	sticky = "on",
-	height = 25,
-	--height = 39,
+	--height = 25,
+	height = 39,
 	padding_left = padding,
 	padding_right = padding,
 	corner_radius = 0,
