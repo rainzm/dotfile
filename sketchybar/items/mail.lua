@@ -11,12 +11,11 @@ local mail = sbar.add("item", "mail", {
 	},
 	label = { string = "?" },
 	update_freq = 60,
-	click_script = "open -a Mail",
 })
 
 local colors = require("colors")
 
-local function update()
+local function update(with_click)
 	sbar.exec("osascript -e 'tell application \"Mail\" to return the unread count of inbox'", function(result)
 		local mail_count = tonumber(result)
 		if mail_count == 0 then
@@ -25,6 +24,9 @@ local function update()
 				icon = { color = colors.icon_color, drawing = true },
 			})
 		else
+			if with_click then
+				sbar.exec("open -a Mail", function() end)
+			end
 			mail:set({
 				label = { string = result, drawing = true },
 				icon = { color = colors.blue, drawing = true },
@@ -33,6 +35,14 @@ local function update()
 	end)
 end
 
-mail:subscribe("routine", update)
+local function click()
+	update(true)
+end
+
+mail:subscribe("routine", function()
+	update(false)
+end)
+
+mail:subscribe("mouse.clicked", click)
 
 update()

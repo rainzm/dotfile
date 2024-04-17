@@ -21,8 +21,8 @@ local colors = {
 	transparent = "0x00000000",
 }
 
---colors.bar_color = colors.black
-colors.bar_color = colors.dark
+colors.bar_color = colors.black
+--colors.bar_color = colors.dark
 colors.contrast = "0xff34324a"
 colors.bar_border_color = "0xff2b2a3e"
 colors.icon_color = colors.white

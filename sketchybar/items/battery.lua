@@ -51,4 +51,4 @@ local function battery_update()
 	end)
 end
 
-battery:subscribe({ "routine", "power_source_change", "system_woke" }, battery_update)
+battery:subscribe({ "routine", "power_source_change" }, battery_update)

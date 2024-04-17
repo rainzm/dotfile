@@ -51,6 +51,10 @@ local icons = {
 		down = "",
 		up = "",
 	},
+	monitor = {
+		cpu = "󰻠 ",
+		ram = "󰍛 ",
+	},
 }
 
 return icons

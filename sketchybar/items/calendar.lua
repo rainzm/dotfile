@@ -15,6 +15,6 @@ local function update()
 	cal:set({ label = { string = formattedTime } })
 end
 
-cal:subscribe("routine", "system_woke", update)
+cal:subscribe("routine", update)
 
 update()

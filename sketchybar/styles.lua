@@ -1,9 +1,9 @@
 local colors = require("colors")
 local helper = require("helper")
 
+local font_rel = 0.0
 local padding = 6
-local font_size = 16.0
-local space_padding = 8
+local font_size = 14.0 + font_rel
 local icon_label_padding = 4
 
 local font = {
@@ -17,8 +17,8 @@ local bar = {
 	position = "top",
 	topmost = "window",
 	sticky = "on",
-	--height = 25,
-	height = 39,
+	height = 25,
+	--height = 39,
 	padding_left = padding,
 	padding_right = padding,
 	corner_radius = 0,
@@ -86,7 +86,7 @@ local separator = {
 
 return {
 	padding = padding,
-	spance_padding = space_padding,
+	font_rel = font_rel,
 	font = font,
 	font_size = font_size,
 	bar = bar,

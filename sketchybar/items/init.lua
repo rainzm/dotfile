@@ -8,6 +8,7 @@ require("items.wifi")
 require("items.volume")
 require("items.mail")
 require("items.networks")
-require("items.flow")
-
+require("items.monitor")
 require("items.media")
+
+require("items.task")

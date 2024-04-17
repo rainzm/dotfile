@@ -1,5 +1,6 @@
 local colors = require("colors")
 local icons = require("icons")
+
 local network_down_attrs = {
 	y_offset = -5,
 	label = {

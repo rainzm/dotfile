@@ -29,7 +29,7 @@ local function space_windows_change(env)
 	local apps = env.INFO.apps
 	local icon_strip = " "
 	for app in pairs(apps) do
-		icon_strip = icon_strip .. " " .. helper.app_icon(app)
+		icon_strip = icon_strip .. helper.app_icon(app)
 	end
 	if icon_strip == " " then
 		icon_strip = " —"
@@ -39,20 +39,19 @@ local function space_windows_change(env)
 	end)
 end
 
-local padding = styles.spance_padding
 for i = 1, 12, 1 do
-	local space = sbar.add("space", {
+	local space = sbar.add("space", "space." .. tostring(i), {
 		associated_space = i,
 		icon = {
 			string = i,
 			padding_left = 0,
-			padding_right = -padding,
+			padding_right = -styles.padding / 2,
 			highlight_color = colors.highlight,
 		},
-		padding_left = padding,
-		padding_right = padding,
+		padding_left = styles.padding,
+		padding_right = styles.padding,
 		label = {
-			padding_right = padding,
+			padding_right = styles.padding,
 			color = colors.white_50,
 			highlight_color = colors.highlight,
 			font = {
