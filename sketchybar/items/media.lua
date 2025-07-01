@@ -78,7 +78,7 @@ local media_ctrl_back = sbar.add("item", "media_ctrl.back", {
 		padding_right = 5,
 		color = colors.black,
 	},
-	click_script = "nowplaying-cli previous",
+	click_script = "/usr/local/bin/nowplaying-cli previous",
 	label = { drawing = false },
 	y_offset = -45,
 })
@@ -101,7 +101,7 @@ local media_ctrl_play = sbar.add("item", "media_ctrl.play", {
 		drawing = true,
 	},
 	updates = true,
-	click_script = "nowplaying-cli togglePlayPause",
+	click_script = "media-control toggle-play-pause",
 	label = { drawing = false },
 	y_offset = -45,
 })
@@ -114,7 +114,7 @@ local media_ctrl_next = sbar.add("item", "media_ctrl.next", {
 		padding_right = 5,
 		color = colors.black,
 	},
-	click_script = "nowplaying-cli next",
+	click_script = "/usr/local/bin/nowplaying-cli next",
 	label = { drawing = false },
 	y_offset = -45,
 })
@@ -144,24 +144,12 @@ sbar.add(
 
 local function update()
 	sbar.exec(
-		"nowplaying-cli get title; nowplaying-cli get artist; nowplaying-cli get album; nowplaying-cli get playbackRate; nowplaying-cli get clientPropertiesData",
+		"media-control get",
 		function(result)
-			local count, title, playbackRate, album, artist, app = 1, "", "", "", "", ""
-			for line in result:gmatch("[^\r\n]+") do
-				if count == 1 then
-					title = line
-				elseif count == 2 then
-					artist = line
-				elseif count == 3 then
-					album = line
-				elseif count == 4 then
-					playbackRate = line
-				elseif count == 5 then
-					local decoded = helper.base64_decode(line)
-					app = decoded:match(":(.*)"):gsub("%c", "")
-				end
-				count = count + 1
-			end
+            local title = result.title
+            local artist = result.artist
+            local album = result.album
+            local playing = result.playing -- 转为 boolean
 			if title == "" then
 				print("media title is empty")
 				return
@@ -169,29 +157,28 @@ local function update()
 			media_ctrl_title:set({ label = { string = title } })
 			media_ctrl_artist:set({ label = { string = artist } })
 			media_ctrl_album:set({ label = { string = album } })
-			media_ctrl_play:set({ icon = { string = playbackRate == "1" and "􀊆" or "􀊄 " } })
+			media_ctrl_play:set({ icon = { string = playing and "􀊆" or "􀊄 " } })
 			media_ctrl:set({
-				icon = { string = helper.app_icon(app) },
+				icon = { string = helper.app_icon("QQMusic") },
 				--label = { string = app .. ": " .. title },
 				drawing = true,
 			})
-			sbar.exec("nowplaying-cli get artworkData", function(data)
-				local file = io.open("/tmp/cover.jpg", "wb")
-				local decoded = helper.base64_decode(data)
-				if file == nil then
-					print("cover file is nil")
-					return
-				end
-				file:write(decoded)
-				file:close()
-				media_ctrl_cover:set({
-					background = {
-						drawing = true,
-						image = { string = "/tmp/cover.jpg", drawing = true },
-						color = "0x00000000",
-					},
-				})
-			end)
+            local data = result.artworkData
+			local file = io.open("/tmp/cover.jpg", "wb")
+			local decoded = helper.base64_decode(data)
+			if file == nil then
+				print("cover file is nil")
+				return
+			end
+			file:write(decoded)
+			file:close()
+			media_ctrl_cover:set({
+				background = {
+					drawing = true,
+					image = { string = "/tmp/cover.jpg", drawing = true },
+					color = "0x00000000",
+				},
+			})
 		end
 	)
 end
@@ -201,4 +188,4 @@ media_ctrl:subscribe("mouse.exited.global", function()
 	media_ctrl:set({ popup = { drawing = false } })
 end)
 
---update()
+update()

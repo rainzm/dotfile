@@ -30,16 +30,19 @@ yabai -m config insert_feedback_color      0xff9dd274
 
 # ===== Rules ==================================
 yabai -m rule --add app!="^(kitty|WezTerm|Google Chrome|iTerm2|Safari浏览器)$" manage=off
+yabai -m rule --add app=".*" sub-layer=normal
+yabai -m rule --add app="^NextChat$" scratchpad=nextchat grid=9:9:1:1:7:7
+yabai -m rule --add app="^Chatbox$" scratchpad=chatbox grid=9:9:1:1:7:7
+yabai -m rule --add app="^Cherry Studio$" scratchpad=cherryStudio grid=9:9:1:1:7:7
+yabai -m rule --add app="^QQ音乐$" scratchpad=qqmusic grid=7:7:1:1:5:5
+#yabai -m rule --add app="^kitty$" title="^note$" scratchpad=note grid=7:7:1:1:5:5
+
 #yabai -m rule --add app!="^(kitty|WezTerm|Google Chrome|iTerm2|Safari浏览器)$" opacity=1.0
 #yabai -m rule --add subrole="^(AXDialog)$" opacity=1.0
 # yabai -m rule --add app="^微信$" title!="^微信 [(]聊天[)]$" manage=off
 # yabai -m rule --add app="^钉钉$" title!="^钉钉$" manage=off
 # yabai -m rule --add app="^(kitty|Google Chrome|iTerm2)$" opacity=0.95
-yabai -m rule --add app=".*" sub-layer=normal
-yabai -m rule --add app="^NextChat$" scratchpad=nextchat grid=9:9:1:1:7:7
-yabai -m rule --add app="^QQ音乐$" scratchpad=qqmusic grid=7:7:1:1:5:5
-yabai -m rule --add app="^kitty$" title="^note$" scratchpad=note grid=7:7:1:1:5:5
-
+#
 yabai -m signal --add event=window_focused action="sketchybar --trigger window_focus"
 yabai -m signal --add event=window_destroyed action="$HOME/.config/yabai/window_quit.lua"
 yabai -m signal --add event=application_terminated action="$HOME/.config/yabai/window_quit.lua"

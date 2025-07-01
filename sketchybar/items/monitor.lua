@@ -73,7 +73,15 @@ cpu:subscribe("mouse.clicked", function(env)
 	sbar.exec("open -a 'Activity Monitor'")
 end)
 
+cpu_label:subscribe("mouse.clicked.entered", function(env)
+	sbar.exec("open -a 'Activity Monitor'")
+end)
+
 ram:subscribe("mouse.clicked", function(env)
+	sbar.exec("open -a 'Activity Monitor'")
+end)
+
+ram_label:subscribe("mouse.clicked.entered", function(env)
 	sbar.exec("open -a 'Activity Monitor'")
 end)
 

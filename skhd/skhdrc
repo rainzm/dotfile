@@ -45,7 +45,8 @@ cmd - tab : $HOME/.config/yabai/switch_window.lua
 
 # open app's windows
 ctrl + cmd - h: open -na /Applications/Google\ Chrome.app
-ctrl + cmd - j: yabai -m window --toggle nextchat || open -a NextChat
+#ctrl + cmd - j: yabai -m window --toggle chatbox || open -a Chatbox
+ctrl + cmd - j: yabai -m window --toggle cherryStudio || open -a Cherry\ Studio
 ctrl + cmd - k: /Applications/kitty.app/Contents/MacOS/kitty -1 -d ~
 ctrl + cmd - l: yabai -m window --toggle qqmusic || open -a QQ音乐
 ctrl + cmd - n: yabai -m window --toggle note || /Applications/kitty.app/Contents/MacOS/kitty -1 --title note -d ~

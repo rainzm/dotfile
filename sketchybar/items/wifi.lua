@@ -7,6 +7,7 @@ local wifi = sbar.add("item", "wifi", {
 	--updates = "when_shown",
 	click_script = helper.popup_toggle,
 	label = { drawing = false },
+	icon = { y_offset = 0 },
 	popup = {
 		horizontal = false,
 		align = "center",
@@ -37,19 +38,30 @@ local wifi_ipaddress = sbar.add("item", {
 	label = { string = "IP Address" },
 })
 
+local function trim(s)
+	return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+
 local function update()
 	sbar.exec(
-		"/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I",
+		"sudo wdutil info && networksetup -listallhardwareports | awk '/Wi-Fi/{getline; print $2}' | xargs networksetup -getairportnetwork",
 		function(wifi_info)
-			local ssid = ""
-			for line in wifi_info:gmatch("[^\r\n]+") do
-				if line:find("SSID:") and not line:find("BSSID:") then
-					ssid = line:match("SSID:%s*(.-)$")
+			local ssid, tx_rate, ip_address = "", "", "", ""
+			for line in string.gmatch(wifi_info, "([^\n]*)\n?") do
+				if ssid ~= "" and tx_rate ~= "" and ip_address ~= "" then
 					break
 				end
+				local key, value = string.match(line, "^%s*([^:]-)%s*:%s*(.*)$")
+				if key and value then
+					if trim(key) == "Current Wi-Fi Network" then
+						ssid = trim(value)
+					elseif trim(key) == "Tx Rate" then
+						tx_rate = trim(value)
+					elseif trim(key) == "IPv4 Address" then
+						ip_address = trim(value)
+					end
+				end
 			end
-			local tx_rate = wifi_info:match("lastTxRate:%s*(%d+)")
-			local ip_address = io.popen("ipconfig getifaddr en0"):read("*a"):gsub("\n", "")
 			local icon = ""
 			local icon_color = ""
 			if ssid ~= "" then
@@ -66,7 +78,7 @@ local function update()
 			if ssid ~= "" then
 				wifi:set({ click_script = helper.popup_toggle })
 				wifi_ssid:set({ label = { string = ssid } })
-				wifi_strength:set({ label = { string = tx_rate .. " Mbps" } })
+				wifi_strength:set({ label = { string = tx_rate } })
 				wifi_ipaddress:set({
 					label = { string = ip_address },
 					click_script = "echo "

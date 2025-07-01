@@ -28,7 +28,7 @@ end
 function M.app_icon(app)
 	local app_icon = require("app_icon")
 	local lookup = app_icon[app]
-	return ((lookup == nil) and app_icon["default"] or lookup)
+	return ((lookup == nil) and app_icon["Default"] or lookup)
 end
 
 local b = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"

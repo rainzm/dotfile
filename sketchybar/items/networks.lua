@@ -20,6 +20,7 @@ local network_down_attrs = {
 	update_freq = 2,
 	position = "right",
 	padding_left = 5,
+	click_script = "skhd -k 'ctrl + cmd - v'",
 }
 
 local network_up_attrs = {
@@ -40,6 +41,7 @@ local network_up_attrs = {
 		highlight_color = colors.green,
 	},
 	position = "right",
+	click_script = "skhd -k 'ctrl + cmd - v'",
 }
 
 local network_down = sbar.add("item", "network.down", network_down_attrs)

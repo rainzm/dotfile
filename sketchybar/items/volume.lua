@@ -4,6 +4,7 @@ local volume = sbar.add("item", "volume", {
 	position = "right",
 	--click_script = "$CONFIG_DIR/plugins/volume_click.sh",
 	icon = { string = "󰕾 " },
+	label = { y_offset = 0 },
 	popup = {
 		align = "center",
 	},
@@ -24,7 +25,12 @@ volume:subscribe("volume_change", function(env)
 	elseif volumen == 0 then
 		icon = icons.volume._0
 	end
-	volume:set({ icon = { string = icon }, label = { string = env.INFO .. "%" } })
+	volume:set({
+		icon = {
+			string = icon,
+		},
+		label = { string = env.INFO .. "%" },
+	})
 end)
 
 local colors = require("colors")

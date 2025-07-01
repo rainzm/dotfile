@@ -9,7 +9,7 @@ local mail = sbar.add("item", "mail", {
 			size = styles.font_size,
 		},
 	},
-	label = { string = "?" },
+	label = { string = "?", y_offset = 0 },
 	update_freq = 60,
 })
 

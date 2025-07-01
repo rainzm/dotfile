@@ -38,8 +38,12 @@ set -x GOBIN $GOPATH/bin
 set -x PATH $PATH:$GOBIN
 # export GOPROXY=https://goproxy.cn,direct
 
+# rust
+set -x PATH $PATH:/Users/rain/.cargo/bin
+
 # nvm
-set -x PATH "/Users/rain/.local/share/nvm/v18.18.1/bin" $PATH
+set -x PATH "/Users/rain/.local/share/nvm/v20.19.0/bin" $PATH
+set -x OPENAI_API_KEY sk-zk23246eac58930f0cd12722d7229487b6666724a9c89610
 
 set -x BAT_THEME Tomorrow-Night
 set -x KUBE_EDITOR nvim
